@@ -88,7 +88,6 @@ def login(
         expires_delta=timedelta(minutes=settings.access_token_expire_minutes),
     )
 
-
     return TokenResponse(
         access_token=access_token,
         token_type="bearer",

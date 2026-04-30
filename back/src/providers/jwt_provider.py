@@ -1,9 +1,12 @@
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
+
 
 import jwt
 from jwt.exceptions import InvalidTokenError
 
 from src.providers.settings_provider import settings
+
 
 
 def create_access_token(
@@ -20,7 +23,7 @@ def create_access_token(
 
     encoded_jwt = jwt.encode(
         to_encode,
-        settings.secret_key,
+        settings.jwt_private_key_path.read_text(),
         algorithm=settings.algorithm,
     )
 
@@ -28,10 +31,13 @@ def create_access_token(
 
 
 def decode_access_token(token: str) -> dict | None:
+    """
+    Decode and validates the JWT token
+    """
     try:
-        payload = jwt.decode(
+        payload = jwt.decode( 
             token,
-            settings.secret_key,
+            settings.jwt_public_key_path.read_text(),
             algorithms=[settings.algorithm],
         )
 
@@ -39,3 +45,8 @@ def decode_access_token(token: str) -> dict | None:
 
     except InvalidTokenError:
         return None
+    
+
+if __name__ == "__main__":
+    token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNyIsImV4cCI6MTc3NzQwOTg4NX0.idRV8N7HLsNTTfGnIou_2Xnn-qPbDu3ws8xvo2TUfaQ"
+    print(decode_access_token(token))
