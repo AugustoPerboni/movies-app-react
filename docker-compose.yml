@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: movies-app-postgres
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: movies_app
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - /home/guto/data/postgres/movies-app:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d movies_app"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./back
+    container_name: movies-app-backend
+    restart: unless-stopped
+    env_file:
+      - ./back/.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./back/keys:/run/keys:ro
+    environment:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@postgres:5432/movies_app
+      JWT_PRIVATE_KEY_PATH: /run/keys/jwt_private.pem
+      JWT_PUBLIC_KEY_PATH: /run/keys/jwt_public.pem
+    command: sh -c "alembic upgrade head && uvicorn src.main:app --host 0.0.0.0 --port 8000"

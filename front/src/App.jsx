@@ -5,8 +5,10 @@ import Home from './pages/Home'
 import Favorite from './pages/Favorites'
 import NavBar from './components/NavBar'
 import { MovieProvider } from './context/MovieContext.jsx'
-
+import Login from './pages/Login.jsx'
 import { Routes, Route } from 'react-router-dom'
+import ProtectedRoute from './components/ProtectedRoute.jsx'
+import Signup from './pages/SignUp.jsx'
 
 function App() {
   return (
@@ -16,8 +18,12 @@ function App() {
       </div>
       <main className="main-content">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/favorites" element={<Favorite />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/favorites" element={<Favorite />} />
+          </Route>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </main>
     </MovieProvider>
