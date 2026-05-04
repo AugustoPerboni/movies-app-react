@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from src.controllers.v1.auth_controller import router as auth_router
 from src.controllers.v1.users_controller import router as users_router
+from src.providers.agent import create_app
+
 
 app = FastAPI(
     title="My Auth API",
@@ -27,6 +29,7 @@ app.include_router(users_router)
 def health_check():
     return {"status": "ok"}
 
+app = create_app(app)
 
 if __name__ == "__main__":
     uvicorn.run(
