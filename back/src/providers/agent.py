@@ -24,7 +24,7 @@ def create_app(base_app):
     agno_assist = get_agno_assist()
     agent_os = AgentOS(
         agents=[agno_assist], 
-        # interfaces=[AGUI(agent=agno_assist)], 
+        interfaces=[AGUI(agent=agno_assist)], 
         tracing=True,
         base_app=base_app,
         )
