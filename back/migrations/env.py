@@ -1,11 +1,21 @@
 from logging.config import fileConfig
 
 from alembic import context
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy import engine_from_config, pool
 from sqlmodel import SQLModel
 
-from src.providers.settings_provider import settings
 from src.models import *
+
+
+class MigrationSettings(BaseSettings):
+    database_url: str
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
 
 
 # IMPORTANT:
@@ -18,7 +28,7 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-config.set_main_option("sqlalchemy.url", settings.database_url)
+config.set_main_option("sqlalchemy.url", MigrationSettings().database_url)
 
 target_metadata = SQLModel.metadata
 

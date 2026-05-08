@@ -1,9 +1,0 @@
-{
-  "recommendations": [
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "HTMLHint.vscode-htmlhint",
-    "ms-python.python",
-    "ms-python.debugpy"
-  ]
-}

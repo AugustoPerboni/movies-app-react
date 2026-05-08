@@ -6,6 +6,7 @@ keys/
 
 # Python
 __pycache__/
+**/__pycache__/
 *.py[cod]
 .venv/
 .pytest_cache/
@@ -28,10 +29,8 @@ dist-ssr/
 *.local
 
 # Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-**/.vscode/*
-!/.vscode/extensions.json
+.vscode/
+**/.vscode/
 .idea/
 .DS_Store
 *.suo
