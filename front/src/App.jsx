@@ -9,10 +9,12 @@ import Login from './pages/Login.jsx'
 import { Routes, Route } from 'react-router-dom'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import Signup from './pages/SignUp.jsx'
+import { CopilotSidebar } from '@copilotkit/react-ui'
 
 function App() {
   return (
     <MovieProvider>
+      <CopilotSidebar />
       <div>
         <NavBar />
       </div>
