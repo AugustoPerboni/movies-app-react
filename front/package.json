@@ -12,9 +12,16 @@
     "lint:html": "htmlhint \"**/*.html\" --ignore \"dist/**,node_modules/**\"",
     "format": "prettier --write \"**/*.{js,jsx,html}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,html}\"",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "copilotkit-runtime": "node copilotkit-runtime/server.js"
   },
   "dependencies": {
+    "@ag-ui/agno": "^0.0.3",
+    "@ag-ui/client": "^0.0.53",
+    "@copilotkit/react-core": "^1.57.0",
+    "@copilotkit/react-ui": "^1.57.0",
+    "@copilotkit/runtime": "^1.57.0",
+    "express": "^5.2.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-router-dom": "^7.14.2"

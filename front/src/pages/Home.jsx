@@ -2,7 +2,8 @@ import '../css/Home.css'
 
 import MovieCard from '../components/MovieCard'
 import { searchMovies, getPopularMovies } from '../services/api'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
+import { useCopilotReadable } from '@copilotkit/react-core'
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -45,6 +46,35 @@ function Home() {
     }
   }
 
+  const displayedMovies = useMemo(() => {
+    return movies.filter((movie) => movie.title.toLowerCase().startsWith(searchQuery.toLowerCase()))
+  }, [movies, searchQuery])
+
+  const copilotMovies = useMemo(() => {
+    return displayedMovies.map((movie, index) => ({
+      position: index + 1,
+      id: movie.id,
+      title: movie.title,
+      releaseYear: movie.release_date?.split('-')[0] || null,
+      overview: movie.overview,
+      rating: movie.vote_average,
+    }))
+  }, [displayedMovies])
+
+  useCopilotReadable(
+    {
+      description:
+        'Movies currently displayed in the movie grid on the Home page. Use these when answering questions about visible movies.',
+      value: {
+        searchQuery,
+        count: copilotMovies.length,
+        movies: copilotMovies,
+      },
+      available: loading ? 'disabled' : 'enabled',
+    },
+    [searchQuery, loading, copilotMovies],
+  )
+
   return (
     <div className="home">
       <form onSubmit={handleSearch} className="search-form">
@@ -66,12 +96,9 @@ function Home() {
         <div className="loading"> Loading...</div>
       ) : (
         <div className="movies-grid">
-          {movies.map(
-            (movie) =>
-              movie.title.toLowerCase().startsWith(searchQuery.toLocaleLowerCase()) && (
-                <MovieCard movie={movie} key={movie.id} />
-              ),
-          )}
+          {displayedMovies.map((movie) => (
+            <MovieCard movie={movie} key={movie.id} />
+          ))}
         </div>
       )}
     </div>
